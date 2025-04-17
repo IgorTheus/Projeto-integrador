@@ -26,7 +26,7 @@ section {
 
 .section-container {
     display: flex;
-    width: 60%;
+    width: 80%;
     height: 568px;
     border-radius: 10px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.35);
@@ -39,20 +39,24 @@ section {
         align-items: center;
         justify-content: center;
         background-color: #939C9A;
+        border-radius: 10px 0 0 10px;
 
-        & img-content{
-            margin-bottom: 35px;
-
+        & .img-content {
+            padding-bottom: 2.8rem;
+            
             & img {
-                width: 208px;
-                height: 81px;
+                width: 340px;
+                height: 130px;
             }
         }
+
+
 
         & h2 {
             font-size: 36px;
             font-weight: normal;
-            margin: 2rem 0;
+            margin-bottom: 9rem;
+            display: flex;
         }
     }
 
@@ -100,8 +104,7 @@ section {
                 font-weight: 300;
             }
 
-            & .fa-solid {
-                z-index: 1;
+            & .fa-regular {
                 position: relative;
                 bottom: 25px;
                 left: 120px;
@@ -130,4 +133,56 @@ section {
 
 }
 
+@media screen and (max-width: 800px) {
+    .section-container{
+        width: 80%;
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+        
+        & .left-content {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px 10px 0 0;
 
+            .img-content {
+                margin-bottom: 0;
+                padding-top: 1rem;
+                
+            }
+
+            & h2 {
+                margin-bottom: 2rem;
+            }
+        }
+
+        & .right-content {
+            padding: 1rem;
+
+            & .title {
+                padding-bottom: 2rem;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 900px){
+    .section-container .left-content {
+        justify-content: flex-start;
+        gap: 30px;
+
+        & .img-content {
+            padding: 0;
+            margin-bottom: 2rem;
+            margin-top: 5rem;
+    
+            & img {
+                width: 260px;
+                height: 90px;
+            }
+        }
+    }
+    .left-content h2 {
+        margin: 0;
+    }
+}

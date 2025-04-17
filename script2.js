@@ -1,8 +1,12 @@
+seePwd();
+
 function seePwd(){
-    let looking = document.querySelectorAll('.fa-solid');
-    looking.forEach((eye)=>{
-        eye.addEventListener('click', ()=> {
-            console.log(`Clicado ${eye}`)
+    let looking = document.querySelectorAll('.fa-regular');
+    looking.forEach((icon)=>{
+        icon.addEventListener('click', ()=> {
+            const input = document.querySelector('input[name=password]')
+            input.type = input.type === 'password' ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
         })
 
 
