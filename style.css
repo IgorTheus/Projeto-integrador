@@ -36,25 +36,46 @@ section {
         width: 50%;
         text-align: center;
         flex-direction: column;
+        align-items: center;
         justify-content: center;
         background-color: #939C9A;
 
+        & img-content{
+            margin-bottom: 35px;
+
+            & img {
+                width: 208px;
+                height: 81px;
+            }
+        }
+
         & h2 {
-            font-size: 35px;
+            font-size: 36px;
             font-weight: normal;
+            margin: 2rem 0;
         }
     }
 
     & .right-content {
-        display: flex;
         width: 50%;
+        height: 90%;
+        display: flex;
         flex-direction: column;
         justify-content: space-around;
         text-align: center;
-        
+        margin: auto 0;
+
+        & .title {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
         & h2 {
+            width: 90px;
             font-size: 35px;
             font-weight: normal;
+            border-bottom: 1px solid black;
         }
 
         
@@ -74,8 +95,20 @@ section {
                 width: 280px;
                 border-radius: 10px;
                 border: 1px solid black;
+                padding: 1rem;
+                font-size: 16px;
+                font-weight: 300;
+            }
+
+            & .fa-solid {
+                z-index: 1;
+                position: relative;
+                bottom: 25px;
+                left: 120px;
+                cursor: pointer;
             }
         }
+
 
         & .button-content {
             margin-top: 34px;
