@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Painel Administrativo</title>
+</head>
+<body>
+    <header>
+        <nav class="nav-bar">
+            <ul>
+                <li><img src="../images/logo.png" alt="Logo Negrão"></li>
+                <li>Painel de Controle</li>
+                <li></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <div class="left-content">
+                <div class="title">
+                    <h2>Cadastro de Peças</h2>
+                </div>
+                <form class="register">
+
+                    <div class="inputs">
+                        <label for="name">Nome do Produto:</label>
+                        <input type="text" name="name" id="name" placeholder="Produto A">
+                    </div>
+                    <div class="inputs">
+                        <label for="cod">Código:</label>
+                        <input type="number" name="cod" id="cod" placeholder="1234">
+                    </div>
+                    <div class="inputs">
+                        <label for="desc">Descrição</label>
+                        <input type="text" name="desc" id="desc" placeholder="Descrição do produto">
+                    </div>
+                    <div class="inputs">
+                        <label for="amt">Quantidade:</label>
+                        <input type="number" name="amt" id="amt" placeholder="0">
+                    </div>
+
+                    <div class="btn-reg">
+                        <input type="submit" class="btn" value="Cadastrar">
+                    </div>
+
+                </form>
+            </div>
+        </section>
+    </main>
+    
+    <script src="global.js"></script>
+</body>
+</html>
