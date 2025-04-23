@@ -112,12 +112,20 @@ section {
             }
         }
 
+        & .error-inputs {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 10px;
+            color: red;
+        }
 
         & .button-content {
             margin-top: 34px;
             margin-bottom: 2rem;
 
-            & .btn {
+            & .btn-sub {
                 width: 90px;
                 height: 24px;
                 border-radius: 30px;
@@ -125,12 +133,28 @@ section {
                 cursor: pointer;
             }
 
-            & .btn:hover {
+            & .btn-sub:hover {
                 background-color: #ccc;
             }
         }
     }
 
+}
+
+@media screen and (max-width: 400px){
+    section .section-container{
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+
+        & .left-content {
+            border-radius: 0;
+
+            & .img-content {
+                margin-top: 2rem;
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 800px) {
@@ -161,6 +185,10 @@ section {
 
             & .title {
                 padding-bottom: 2rem;
+            }
+
+            & .error-inputs i {
+                display: none;
             }
         }
     }
