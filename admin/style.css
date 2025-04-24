@@ -94,6 +94,18 @@ main {
                     }
                 }
 
+                & .invalid{
+                    display: none;
+                    padding-left: 0.3rem;
+                    color: red;
+                }
+
+                & .err-msg {
+                    display: block;
+                }
+
+                /* Validação via JavaScript */
+
                 & .btn-reg {
                     display: flex;
                     justify-content: center;

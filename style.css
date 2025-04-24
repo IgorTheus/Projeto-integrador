@@ -112,6 +112,10 @@ section {
             }
         }
 
+        & input[type=password]::-ms-reveal, ::-ms-clear{
+            display: none;
+        }
+
         & .error-inputs {
             display: none;
             justify-content: center;

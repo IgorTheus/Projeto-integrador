@@ -28,19 +28,22 @@
                 </div>
                 <form class="register">
 
-                    <div class="inputs">
+                    <div class="inputs name-input">
                         <label for="name">Nome do Produto:</label>
                         <input type="text" name="name" id="name" placeholder="Produto A">
+                        <p class="invalid invalid-name">Nome vazio!</p>
+                        <p class="invalid invalid-name">Nome inválido!</p>
                     </div>
-                    <div class="inputs">
+                    <div class="inputs cod-input">
                         <label for="cod">Código:</label>
-                        <input type="number" name="cod" id="cod" placeholder="1234">
+                        <input type="tel" name="cod" id="cod" placeholder="1234-5678" maxlength="8">
+                        <p class="invalid invalid-code">Este campo aceita apenas números!</p>
                     </div>
-                    <div class="inputs">
+                    <div class="inputs desc-input">
                         <label for="desc">Descrição</label>
                         <input type="text" name="desc" id="desc" placeholder="Descrição do produto">
                     </div>
-                    <div class="inputs">
+                    <div class="inputs amt-input">
                         <label for="amt">Quantidade:</label>
                         <input type="number" name="amt" id="amt" placeholder="0">
                     </div>
