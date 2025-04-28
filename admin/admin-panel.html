@@ -30,26 +30,30 @@
 
                     <div class="inputs name-input">
                         <label for="name">Nome do Produto:</label>
-                        <input type="text" name="name" id="name" placeholder="Produto A">
-                        <p class="invalid invalid-name">Nome vazio!</p>
+                        <input class="input" type="text" name="name" id="name" placeholder="Produto A">
+                        <p class="invalid invalid-name">Este campo precisa estar preenchido!</p>
                         <p class="invalid invalid-name">Nome inválido!</p>
                     </div>
                     <div class="inputs cod-input">
                         <label for="cod">Código:</label>
-                        <input type="tel" name="cod" id="cod" placeholder="1234-5678" maxlength="8">
+                        <input class="input" type="tel" name="cod" id="cod" placeholder="1234-5678" maxlength="8">
+                        <p class="invalid invalid-code">Este campo precisa estar preenchido!</p>
                         <p class="invalid invalid-code">Este campo aceita apenas números!</p>
+                        <p class="invalid invalid-code">O código deve conter 8 números</p>
                     </div>
                     <div class="inputs desc-input">
-                        <label for="desc">Descrição</label>
-                        <input type="text" name="desc" id="desc" placeholder="Descrição do produto">
+                        <label for="desc">Descrição:</label>
+                        <input class="input" type="text" name="desc" id="desc" placeholder="Descrição do produto">
+                        <p class="invalid invalid-desc">Não utilize caracteres especiais!</p>
                     </div>
                     <div class="inputs amt-input">
                         <label for="amt">Quantidade:</label>
-                        <input type="number" name="amt" id="amt" placeholder="0">
+                        <input class="input" type="number" name="amt" id="amt" placeholder="0" min="1">
+                        <p class="invalid invalid-amt">Este campo precisa estar preenchido!</p>
                     </div>
 
                     <div class="btn-reg">
-                        <input type="submit" class="btn" value="Cadastrar">
+                        <input class="btn" type="submit" value="Cadastrar">
                     </div>
 
                 </form>
