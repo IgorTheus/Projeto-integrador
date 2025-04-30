@@ -15,7 +15,7 @@ function Welcome(){
         const role = roleSearch ? roleSearch[0] : "Sem autorização!";
 
         if(role == 'Sem autorização!'){
-            document.location.href = 'http://localhost:5500/PI/Projeto integrador/login-admin.html'
+            document.location.href = '../login-admin.html'
         }
         if(regexAdmin.test(cookie)){
             content.innerHTML = `Olá, admin!`;
