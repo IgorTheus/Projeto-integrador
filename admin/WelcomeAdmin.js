@@ -17,7 +17,7 @@ function WelcomeAdmin(){
             content.innerHTML = `Olá, usuário admin!`;
         }
         if(!regexAdmin.test(cookie)){
-            document.location.href = '/admin/panel.html';
+            document.location.href = 'panel.html';
         }
     }, 500);
 }
