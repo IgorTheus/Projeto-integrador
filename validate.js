@@ -16,7 +16,7 @@ function Validate(){
         if(pass == admin){
             document.cookie = "role=admin";
             valid = true;
-            document.location.href = "/admin/admin-panel.html";
+            document.location.href = "admin/admin-panel.html";
         } else {
             valid = false;
         }
@@ -26,7 +26,7 @@ function Validate(){
         if(pass == usuario){
             document.cookie = "role=user";
             valid = true;
-            document.location.href = "/admin/panel.html";
+            document.location.href = "admin/panel.html";
         } else {
             valid = false;
         }
