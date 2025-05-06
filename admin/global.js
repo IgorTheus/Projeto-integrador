@@ -1,31 +1,9 @@
 const form = document.querySelector("form");
 const cod = document.querySelector("#cod");
 
-Welcome();
-
-function Welcome(){
-    const regexAdmin = /^role=admin$/;
-    const regexUser = /^role=user$/;
-    let content = document.querySelector('.nav-bar ul').lastElementChild;
-    const regexBasic = /role=[a-z]+/;
-
-    setInterval(()=>{ // Valida se o usuário possui um cookie de sessão valido a cada segundo
-        let cookie = document.cookie;
-        const roleSearch = cookie.match(regexBasic);
-        const role = roleSearch ? roleSearch[0] : "Sem autorização!";
-
-        if(role == 'Sem autorização!'){
-            document.location.href = '../login-admin.html'
-        }
-        if(regexAdmin.test(cookie)){
-            content.innerHTML = `Olá, admin!`;
-        } 
-        if(regexUser.test(cookie)) {
-            content.innerHTML = `Olá, colaborador!`;
-        }
-    }, 1000);
-
-}
+const inpName = document.getElementById("name").value;
+const inpAmt = document.getElementById("amt").value;
+let tbody = document.querySelector("tbody");
 
 form.addEventListener('submit', (e)=>{ // Envia o formulário com todas as validações
     const isNameValid = checkName();
@@ -33,7 +11,10 @@ form.addEventListener('submit', (e)=>{ // Envia o formulário com todas as valid
     const isDescValid = checkDesc();
     const isAmtValid = checkAmt();
     
-    if(!(isNameValid && isCodValid && isDescValid && isAmtValid)){
+    if(isNameValid && isCodValid && isDescValid && isAmtValid){
+        e.preventDefault();
+        registerStock();
+    } else {
         e.preventDefault();
     }
 })
@@ -47,7 +28,6 @@ function checkName(){ // Valida se é um nome válido
 
     let regexTest = regexName.test(nameVal);
     let regexTestNum = regexNum.test(nameVal);
-    console.log(nameVal)
 
     if(regexTest == true){
         if(regexTestNum){
@@ -97,25 +77,31 @@ codFormat();
 
 function codError(){ // Adiciona ou remove erros do input código
     const regexCod = /^[0-9]+$/g;
+    const invalidRegex = /[a-zA-Z\u00C0-\u00FF]+/;
     const codInp = document.querySelectorAll(".invalid-code");
     let codVerify = cod.value;
 
-    if(!regexCod.test(cod.value) && codVerify[4] != "-"){
-        if(cod.value.length == 0){
+    if(!regexCod.test(codVerify) && codVerify[4] != "-"){
+        if(codVerify.length == 0){
             removeErr(codInp);
             codInp[0].classList.add("err-msg");
             cod.classList.add("invalid-input");
             return false;
         } else {
             removeErr(codInp);
+            codInp[1].classList.add("err-msg");
+            cod.classList.add("invalid-input");
+            return false;
+        }
+    } else {
+        if(codVerify.match(invalidRegex)){
+            removeErr(codInp);
             codInp[2].classList.remove("err-msg");
             codInp[1].classList.add("err-msg");
             cod.classList.add("invalid-input");
             return false;
         }
-        
-    } else {
-        if(cod.value.length < 8){
+        if(codVerify.length < 8){
             codInp[1].classList.remove("err-msg");
             codInp[2].classList.add("err-msg");
             cod.classList.add("invalid-input");
@@ -127,7 +113,7 @@ function codError(){ // Adiciona ou remove erros do input código
     }
 }
 
-function removeErr(codInp, inp){ // Remove erros do input código
+function removeErr(codInp){ // Remove erros do input código
     codInp.forEach((code)=>{
         code.classList.remove("err-msg");
     })
@@ -136,7 +122,7 @@ function removeErr(codInp, inp){ // Remove erros do input código
 
 function checkDesc(){ // Checa se é uma descrição sem caracteres
     const descInp = document.querySelector("#desc");
-    const regexDesc = /^[a-zA-Z\u00C0-\u00FF.,-]+$/g;
+    const regexDesc = /^[a-zA-Z\u00C0-\u00FF.,-\s]+$/g;
     let validate = regexDesc.test(descInp.value);
     const pInvalid = document.querySelector(".invalid-desc");
 
@@ -171,4 +157,44 @@ function checkAmt(){ // Checa se o input amount está vazio ou não
         amtInp.classList.remove("invalid-input");
         return true;
     }
+}
+
+function registerStock(){
+    const formData = new FormData(form);
+    const inpName = formData.get('name');
+    const inpAmt = formData.get('amt');
+    let date = new Date;
+    let day = date.getDate();
+    let month = (date.getMonth() + 1);
+    let monthFormat = month < 10 ? '0' + month : month.toString();
+    let dayFormat = day < 10 ? '0' + day : day;
+    let year = date.getFullYear();
+    let color;
+    if(inpAmt == 0){
+        color = '#FF0000';
+        tbody.innerHTML += `
+        <tr>
+            <td>${inpName}</td>
+            <td>${inpAmt}</td>
+            <td class="status">
+                <i class="fa-solid fa-circle" style="color: ${color};"></i>
+                <p class="sem-estoque">Sem estoque</p>    
+            </td>
+            <td>${dayFormat}/${monthFormat}/${year}</td>
+        </tr>`
+    } else{
+        color = '#32C505';
+        tbody.innerHTML += `
+        <tr>
+            <td>${inpName}</td>
+            <td>${inpAmt}</td>
+            <td class="status">
+                <i class="fa-solid fa-circle" style="color: ${color};"></i>
+                <p class="em-estoque">Em estoque</p>    
+            </td>
+            <td>${dayFormat}/${monthFormat}/${year}</td>
+        </tr>`
+    }
+
+    form.reset();
 }

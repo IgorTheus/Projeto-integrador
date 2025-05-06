@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin-panel.css">
     <title>Painel Administrativo</title>
 </head>
 <body>
@@ -48,7 +49,7 @@
                     </div>
                     <div class="inputs amt-input">
                         <label for="amt">Quantidade:</label>
-                        <input class="input" type="number" name="amt" id="amt" placeholder="0" min="1">
+                        <input class="input" type="number" name="amt" id="amt" placeholder="0" min="0">
                         <p class="invalid invalid-amt">Este campo precisa estar preenchido!</p>
                     </div>
 
@@ -58,9 +59,39 @@
 
                 </form>
             </div>
+
+            <div class="right-content">
+
+                <h1>Histórico de Movimentações</h1>
+                <div class="input-search">
+                    <input id="search_field" type="text" name="search_field" placeholder="Buscar peças...">
+                    <img src="lupa.svg" alt="search">
+                </div>
+
+                <div class="estoque-container">
+                    <h2>Visualização do Estoque Atual</h2>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Peças</th>
+                                    <th>Quantidade</th>
+                                    <th>Status</th>
+                                    <th>Data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
-    
+
+    <script src="WelcomeAdmin.js"></script>
     <script src="global.js"></script>
+    <script src="search.js"></script>
 </body>
 </html>
