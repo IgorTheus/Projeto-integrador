@@ -132,6 +132,27 @@ label {
     background-color: rgba(194, 194, 194, 0.4);
 }
 
+.delete-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.delete-button input {
+    width: 116px;
+    height: 38px;
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 10px;
+    border: 1px solid #FF0000;
+    color: #FF0000;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.delete-button input:hover {
+    background-color: rgba(194, 194, 194, 0.4);
+}
+
 /* Comeco do conteudo historico de movimentacoes */
 
 .right-content {

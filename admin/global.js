@@ -1,23 +1,138 @@
-const form = document.querySelector("form");
-const cod = document.querySelector("#cod");
+const registerForm = document.querySelector(".register");
+const deleteForm = document.querySelector(".delete-form");
+const cod = document.querySelectorAll("input[name=cod]");
+let index, state = null;
 
-const inpName = document.getElementById("name").value;
-const inpAmt = document.getElementById("amt").value;
 let tbody = document.querySelector("tbody");
 
-form.addEventListener('submit', (e)=>{ // Envia o formulário com todas as validações
+const inputSub = document.querySelectorAll("form input[type=submit]")
+let inputClick, validateInput = null;
+let nameFormValue = null;
+let codFormValue = null;
+let descFormValue = null;
+let amtFormValue = null;
+let nameDelValue, codDelValue, descDelValue, amtDelValue = null;
+let nameList = []
+let codList = []
+let descList = []
+let amtList = []
+
+let dados = {
+    "name": nameList,
+    "cod": codList,
+    "desc": descList,
+    "amt": amtList
+}
+
+inputSub.forEach((input)=>{ // Identifica qual dos botões foi clicado
+    input.addEventListener('click', ()=>{
+        inputClick = input.value;
+        if(inputClick == "Cadastrar"){
+            validateInput = 1;
+            registerForm.classList.remove("hidden");
+            deleteForm.classList.add("hidden");
+            document.querySelector(".title-register").classList.remove("hidden");
+            document.querySelector(".title-delete").classList.add("hidden");
+        }
+        if(inputClick == "Remover peça"){
+            validateInput = 0;
+            registerForm.classList.add("hidden");
+            deleteForm.classList.remove("hidden");
+            document.querySelector(".title-register").classList.add("hidden");
+            document.querySelector(".title-delete").classList.remove("hidden");
+        }
+    })
+})
+
+registerForm.addEventListener('submit', (e)=>{ // Envia o formulário com todas as validações
+    e.preventDefault();
     const isNameValid = checkName();
     const isCodValid = codError();
     const isDescValid = checkDesc();
     const isAmtValid = checkAmt();
-    
-    if(isNameValid && isCodValid && isDescValid && isAmtValid){
-        e.preventDefault();
-        registerStock();
-    } else {
-        e.preventDefault();
+    const formData = new FormData(registerForm);
+    const inpName = formData.get('name');
+    const inpAmt = formData.get('amt');
+
+    nameFormValue = registerForm.name.value;
+    codFormValue = registerForm.cod.value;
+    descFormValue = registerForm.desc.value;
+    amtFormValue = parseInt(registerForm.amt.value);
+
+    if(isNameValid && isCodValid && isDescValid && isAmtValid && validateInput == 1){ // Cadastra peças
+        
+        index = dados['cod'].indexOf(codFormValue);
+        if(nameFormValue != dados['name'][index] && index != -1){
+            document.querySelectorAll(".register .invalid-name")[2].classList.add("err-msg");
+            return false;
+        } else if(index != -1){
+            if(dados['amt'][index] == 0){
+                dados['amt'][index] = amtFormValue;
+            } else {
+                dados['amt'][index] += amtFormValue;
+            }
+            document.querySelectorAll(".register .invalid-name")[2].classList.remove("err-msg");
+        } else {
+            nameList.push(nameFormValue);
+            codList.push(codFormValue);
+            descList.push(descFormValue);
+            amtList.push(amtFormValue);
+        }
+
+        registerStock(inpName, inpAmt, 'entrada');
+        registerForm.reset();
     }
 })
+
+deleteForm.addEventListener('submit', (e)=>{ // Evento de envio do formulário delete
+    e.preventDefault();
+    verifyInfoDelete();
+})
+
+function verifyInfoDelete(){ // Verifica as informações do formulário de remoção
+    codDelValue = deleteForm.cod.value;
+    amtDelValue = parseInt(deleteForm.amt.value);
+
+    const invalidCode = document.querySelectorAll(".delete-form .invalid-code");
+    const invalidAmt = document.querySelectorAll(".delete-form .invalid-amt");
+    let findIndCod = dados["cod"].indexOf(codDelValue);
+
+    if(findIndCod != -1){ // Verifica se o código existe
+        invalidCode.forEach((el)=> el.classList.remove("err-msg"));
+        if(amtDelValue == ''){ // Adiciona erro se a quantidade for vazia
+            invalidAmt.forEach((el)=> el.classList.remove("err-msg"));
+            invalidAmt[0].classList.add("err-msg");
+        } else if(amtDelValue <= dados['amt'][findIndCod]){ // Registra os dados na tabela
+            invalidAmt.forEach((el)=> el.classList.remove("err-msg"));
+            updateTables(amtDelValue, findIndCod);
+            registerStock(dados['name'][findIndCod], amtDelValue, 'saida');
+            console.log(dados);
+            deleteForm.reset();
+        } else { // Erro de quantidade inválida
+            invalidAmt.forEach((el)=> el.classList.remove("err-msg"));
+            invalidAmt[1].classList.add("err-msg");
+        }
+    } else {
+        if(codDelValue == ''){ // Erro se o código for vazio
+            invalidCode.forEach((el)=> el.classList.remove("err-msg"));
+            invalidCode[0].classList.add("err-msg");
+        } else { // Erro se o código não existir
+            invalidCode.forEach((el)=> el.classList.remove("err-msg"));
+            invalidCode[1].classList.add("err-msg");
+        }
+        if(amtDelValue == ''){ // Erro se a quantidade for vazia
+            invalidAmt.forEach((el)=> el.classList.remove("err-msg"));
+            invalidAmt[0].classList.add("err-msg");
+        } else { // Erro se a quantidade não pertencer a algum produto existente
+            invalidAmt.forEach((el)=> el.classList.remove("err-msg"));
+            invalidAmt[2].classList.add("err-msg");
+        }
+    }
+}
+
+function updateTables(amtVal, ind){ // Faz a atualização das tabelas com novas quantidades
+    dados['amt'][ind] -= amtVal;
+}
 
 function checkName(){ // Valida se é um nome válido
     let name = document.querySelector("#name");
@@ -65,13 +180,16 @@ function invalidName(val){ // Utilizado para add ou rem a classe de err-msg
 }
 
 function codFormat(){ // Utilizado para formatar o campo de cod assim q o usuario sair do campo
-    cod.addEventListener('blur', ()=>{
-        if(cod.value.length == 8){
-            const codeVal = cod.value.split(""); // Transforma em array de caracteres
-            codeVal.splice(4, 0, "-"); // No  indice 4 adiciona o "-"
-            cod.value = `${codeVal.join("")}`; // Constroi o array em string
-        }
+    cod.forEach((codInp)=>{
+        codInp.addEventListener('blur', ()=>{
+            if(codInp.value.length == 8){
+                const codeVal = codInp.value.split(""); // Transforma em array de caracteres
+                codeVal.splice(4, 0, "-"); // No  indice 4 adiciona o "-"
+                codInp.value = `${codeVal.join("")}`; // Constroi o array em string
+            }
+        })
     })
+
 }
 codFormat();
 
@@ -79,18 +197,18 @@ function codError(){ // Adiciona ou remove erros do input código
     const regexCod = /^[0-9]+$/g;
     const invalidRegex = /[a-zA-Z\u00C0-\u00FF]+/;
     const codInp = document.querySelectorAll(".invalid-code");
-    let codVerify = cod.value;
+    let codVerify = cod[0].value;
 
     if(!regexCod.test(codVerify) && codVerify[4] != "-"){
         if(codVerify.length == 0){
             removeErr(codInp);
             codInp[0].classList.add("err-msg");
-            cod.classList.add("invalid-input");
+            cod[0].classList.add("invalid-input");
             return false;
         } else {
             removeErr(codInp);
             codInp[1].classList.add("err-msg");
-            cod.classList.add("invalid-input");
+            cod[0].classList.add("invalid-input");
             return false;
         }
     } else {
@@ -98,13 +216,13 @@ function codError(){ // Adiciona ou remove erros do input código
             removeErr(codInp);
             codInp[2].classList.remove("err-msg");
             codInp[1].classList.add("err-msg");
-            cod.classList.add("invalid-input");
+            cod[0].classList.add("invalid-input");
             return false;
         }
         if(codVerify.length < 8){
             codInp[1].classList.remove("err-msg");
             codInp[2].classList.add("err-msg");
-            cod.classList.add("invalid-input");
+            cod[0].classList.add("invalid-input");
             return false;
         } else {
             removeErr(codInp);
@@ -117,7 +235,7 @@ function removeErr(codInp){ // Remove erros do input código
     codInp.forEach((code)=>{
         code.classList.remove("err-msg");
     })
-    cod.classList.remove("invalid-input");
+    cod[0].classList.remove("invalid-input");
 }
 
 function checkDesc(){ // Checa se é uma descrição sem caracteres
@@ -146,8 +264,8 @@ function checkDesc(){ // Checa se é uma descrição sem caracteres
 }
 
 function checkAmt(){ // Checa se o input amount está vazio ou não
-    const amtInp = document.querySelector("#amt");
-    const pInvalid = document.querySelector(".invalid-amt");
+    const amtInp = document.getElementById("amtReg");
+    const pInvalid = document.querySelector(".register .invalid-amt");
     if(amtInp.value == ""){
         pInvalid.classList.add("err-msg");
         amtInp.classList.add("invalid-input");
@@ -159,10 +277,7 @@ function checkAmt(){ // Checa se o input amount está vazio ou não
     }
 }
 
-function registerStock(){
-    const formData = new FormData(form);
-    const inpName = formData.get('name');
-    const inpAmt = formData.get('amt');
+function registerStock(name, amt, status){ // Identifica se é entrada ou saida de dados e registra na tabela os dados
     let date = new Date;
     let day = date.getDate();
     let month = (date.getMonth() + 1);
@@ -170,24 +285,51 @@ function registerStock(){
     let dayFormat = day < 10 ? '0' + day : day;
     let year = date.getFullYear();
     let color;
-    if(inpAmt == 0){
+    if(amt == 0 && status == 'saida'){
         color = '#FF0000';
         tbody.innerHTML += `
-        <tr>
-            <td>${inpName}</td>
-            <td>${inpAmt}</td>
+        <tr style="background-color: rgba(255, 0, 0, 0.15);">
+            <td>${name}</td>
+            <td>${amt}</td>
             <td class="status">
                 <i class="fa-solid fa-circle" style="color: ${color};"></i>
                 <p class="sem-estoque">Sem estoque</p>    
             </td>
             <td>${dayFormat}/${monthFormat}/${year}</td>
         </tr>`
-    } else{
+    }
+    if(amt != 0 && status == 'saida'){
         color = '#32C505';
         tbody.innerHTML += `
-        <tr>
-            <td>${inpName}</td>
-            <td>${inpAmt}</td>
+        <tr style="background-color: rgba(255, 0, 0, 0.15);">
+            <td>${name}</td>
+            <td>${amt}</td>
+            <td class="status">
+                <i class="fa-solid fa-circle" style="color: ${color};"></i>
+                <p class="em-estoque">Em estoque</p>    
+            </td>
+            <td>${dayFormat}/${monthFormat}/${year}</td>
+        </tr>`
+    }
+    if(amt == 0 && status == 'entrada'){
+        color = '#FF0000';
+        tbody.innerHTML += `
+        <tr style="background-color: rgba(0, 255, 0, 0.25);">
+            <td>${name}</td>
+            <td>${amt}</td>
+            <td class="status">
+                <i class="fa-solid fa-circle" style="color: ${color};"></i>
+                <p class="sem-estoque">Sem estoque</p>    
+            </td>
+            <td>${dayFormat}/${monthFormat}/${year}</td>
+        </tr>`
+    }
+    if(amt != 0 && status == 'entrada'){
+        color = '#32C505';
+        tbody.innerHTML += `
+        <tr style="background-color: rgba(0, 255, 0, 0.25);">
+            <td>${name}</td>
+            <td>${amt}</td>
             <td class="status">
                 <i class="fa-solid fa-circle" style="color: ${color};"></i>
                 <p class="em-estoque">Em estoque</p>    
@@ -196,5 +338,4 @@ function registerStock(){
         </tr>`
     }
 
-    form.reset();
 }
