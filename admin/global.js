@@ -12,16 +12,23 @@ let codFormValue = null;
 let descFormValue = null;
 let amtFormValue = null;
 let nameDelValue, codDelValue, descDelValue, amtDelValue = null;
-let nameList = []
-let codList = []
-let descList = []
-let amtList = []
+let nameList = [];
+let codList = [];
+let descList = [];
+let amtList = [];
+let estoqueList = [];
+let statusList = [];
+let dateList = [];
+let estoqueVal = 0
 
 let dados = {
     "name": nameList,
     "cod": codList,
     "desc": descList,
-    "amt": amtList
+    "amt": amtList,
+    "status": statusList,
+    "estoque": estoqueList,
+    "data": dateList
 }
 
 inputSub.forEach((input)=>{ // Identifica qual dos botões foi clicado
@@ -60,26 +67,24 @@ registerForm.addEventListener('submit', (e)=>{ // Envia o formulário com todas 
     amtFormValue = parseInt(registerForm.amt.value);
 
     if(isNameValid && isCodValid && isDescValid && isAmtValid && validateInput == 1){ // Cadastra peças
-        
-        index = dados['cod'].indexOf(codFormValue);
+        index = dados['cod'].lastIndexOf(codFormValue);
         if(nameFormValue != dados['name'][index] && index != -1){
             document.querySelectorAll(".register .invalid-name")[2].classList.add("err-msg");
             return false;
         } else if(index != -1){
-            if(dados['amt'][index] == 0){
-                dados['amt'][index] = amtFormValue;
-            } else {
-                dados['amt'][index] += amtFormValue;
-            }
+            estoqueVal = dados['estoque'][index] + amtFormValue
             document.querySelectorAll(".register .invalid-name")[2].classList.remove("err-msg");
         } else {
-            nameList.push(nameFormValue);
-            codList.push(codFormValue);
-            descList.push(descFormValue);
-            amtList.push(amtFormValue);
+            estoqueVal = amtFormValue;
         }
-
+        nameList.push(nameFormValue);
+        codList.push(codFormValue);
+        descList.push(descFormValue);
+        estoqueList.push(estoqueVal);
+        dados['status'].push("entrou");
+        dados['amt'].push(amtFormValue);
         registerStock(inpName, inpAmt, 'entrada');
+        localStorage.setItem("estoqueDados", JSON.stringify(dados));
         registerForm.reset();
     }
 })
@@ -87,6 +92,7 @@ registerForm.addEventListener('submit', (e)=>{ // Envia o formulário com todas 
 deleteForm.addEventListener('submit', (e)=>{ // Evento de envio do formulário delete
     e.preventDefault();
     verifyInfoDelete();
+    localStorage.setItem("estoqueDados", JSON.stringify(dados));
 })
 
 function verifyInfoDelete(){ // Verifica as informações do formulário de remoção
@@ -95,18 +101,22 @@ function verifyInfoDelete(){ // Verifica as informações do formulário de remo
 
     const invalidCode = document.querySelectorAll(".delete-form .invalid-code");
     const invalidAmt = document.querySelectorAll(".delete-form .invalid-amt");
-    let findIndCod = dados["cod"].indexOf(codDelValue);
+
+    let findIndCod = dados["cod"].lastIndexOf(codDelValue);
 
     if(findIndCod != -1){ // Verifica se o código existe
         invalidCode.forEach((el)=> el.classList.remove("err-msg"));
         if(amtDelValue == ''){ // Adiciona erro se a quantidade for vazia
             invalidAmt.forEach((el)=> el.classList.remove("err-msg"));
             invalidAmt[0].classList.add("err-msg");
-        } else if(amtDelValue <= dados['amt'][findIndCod]){ // Registra os dados na tabela
+        } else if(amtDelValue <= dados['estoque'][findIndCod]){ // Registra os dados na tabela
             invalidAmt.forEach((el)=> el.classList.remove("err-msg"));
             updateTables(amtDelValue, findIndCod);
+            dados['status'].push("saiu");
+            dados['amt'].push(amtDelValue);
+            dados['cod'].push(codDelValue);
+            dados['name'].push(dados['name'][findIndCod]);
             registerStock(dados['name'][findIndCod], amtDelValue, 'saida');
-            console.log(dados);
             deleteForm.reset();
         } else { // Erro de quantidade inválida
             invalidAmt.forEach((el)=> el.classList.remove("err-msg"));
@@ -131,7 +141,8 @@ function verifyInfoDelete(){ // Verifica as informações do formulário de remo
 }
 
 function updateTables(amtVal, ind){ // Faz a atualização das tabelas com novas quantidades
-    dados['amt'][ind] -= amtVal;
+    estoqueVal = dados['estoque'][ind] - amtVal;
+    dados['estoque'].push(estoqueVal);
 }
 
 function checkName(){ // Valida se é um nome válido
@@ -285,6 +296,8 @@ function registerStock(name, amt, status){ // Identifica se é entrada ou saida 
     let dayFormat = day < 10 ? '0' + day : day;
     let year = date.getFullYear();
     let color;
+    let dataFormat = `${dayFormat}/${monthFormat}/${year}`;
+    dados['data'].push(dataFormat);
     if(amt == 0 && status == 'saida'){
         color = '#FF0000';
         tbody.innerHTML += `
@@ -295,7 +308,7 @@ function registerStock(name, amt, status){ // Identifica se é entrada ou saida 
                 <i class="fa-solid fa-circle" style="color: ${color};"></i>
                 <p class="sem-estoque">Sem estoque</p>    
             </td>
-            <td>${dayFormat}/${monthFormat}/${year}</td>
+            <td>${dataFormat}</td>
         </tr>`
     }
     if(amt != 0 && status == 'saida'){
@@ -308,7 +321,7 @@ function registerStock(name, amt, status){ // Identifica se é entrada ou saida 
                 <i class="fa-solid fa-circle" style="color: ${color};"></i>
                 <p class="em-estoque">Em estoque</p>    
             </td>
-            <td>${dayFormat}/${monthFormat}/${year}</td>
+            <td>${dataFormat}</td>
         </tr>`
     }
     if(amt == 0 && status == 'entrada'){
@@ -321,7 +334,7 @@ function registerStock(name, amt, status){ // Identifica se é entrada ou saida 
                 <i class="fa-solid fa-circle" style="color: ${color};"></i>
                 <p class="sem-estoque">Sem estoque</p>    
             </td>
-            <td>${dayFormat}/${monthFormat}/${year}</td>
+            <td>${dataFormat}</td>
         </tr>`
     }
     if(amt != 0 && status == 'entrada'){
@@ -334,7 +347,7 @@ function registerStock(name, amt, status){ // Identifica se é entrada ou saida 
                 <i class="fa-solid fa-circle" style="color: ${color};"></i>
                 <p class="em-estoque">Em estoque</p>    
             </td>
-            <td>${dayFormat}/${monthFormat}/${year}</td>
+            <td>${dataFormat}</td>
         </tr>`
     }
 

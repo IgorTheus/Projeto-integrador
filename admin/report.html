@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="report.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <title>Relatório</title>
+</head>
+<body>
+    <header>
+        <nav class="nav-bar">
+            <ul>
+                <li><img src="../images/logo.png" alt="Logo Negrão"></li>
+                <li><div class="center-menu">
+                    <a href="admin-panel.html">Painel de Controle</a>
+                    <a href="#">Relatório</a>
+                </div></li>
+                <li></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="section-container">
+            <div class="section-title">
+                <h2>Relatório Simplificado</h2>
+            </div>
+
+            <div class="table-container">
+                <table></table>
+            </div>
+            <select name="typeGraphic" id="typeGraphic">
+                <option selected disabled value="disabled">Escolha uma opção de gráfico</option>
+                <option value="mov">Movimentação Geral</option>
+                <option value="stock">Estoque de Peças</option>
+            </select>
+            <button onclick="initialize()">Gerar Relatório em PDF</button>
+        </section>
+        <canvas id="myChart" style="display: none;"></canvas>
+    </main>
+    <script src="report.js"></script>
+    <script src="exportPDF.js"></script>
+    <script src="WelcomeAdmin.js"></script>
+</body>
+</html>
