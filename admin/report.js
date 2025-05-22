@@ -1,7 +1,7 @@
 const getData = localStorage.getItem("estoqueDados");
+const dados = JSON.parse(getData);
 
-if(getData){
-    const dados = JSON.parse(getData);
+if(getData != null){
     const tableCont = document.querySelector(".table-container table");
     const totalProducts = dados.status.length;
 
@@ -38,4 +38,7 @@ if(getData){
             <tr>${lines[4].join('')}</tr>
             <tr>${lines[5].join('')}</tr>
         </tbody>`;
+} else {
+    const container = document.querySelector(".section-container");
+    container.innerHTML = `<p class="nodata">Sem dados para criar o relatório! <br>Volte a página do painel para cadastrar peças</p>`
 }
