@@ -10,16 +10,20 @@ function initialize(){
         let type = null;
         const data = JSON.parse(estoqueDados);
         
-        if(selected == 'mov'){
-            type = 'mov';
-        } else if(selected == 'stock'){
-            type = 'stock';
-        } else {
+        // if(selected == 'mov'){
+        //     type = 'mov';
+        // } else if(selected == 'stock'){
+        //     type = 'stock';
+        // } else {
+        //     alert("Insira um tipo de relatório!");
+        //     return false;
+        // }
+
+        if(selected != 'mov' && selected != 'stock'){
             alert("Insira um tipo de relatório!");
             return false;
-        }
-
-        function corAleatoria() {
+        } else{
+            function corAleatoria() {
             const r = Math.floor(Math.random() * 255);
             const g = Math.floor(Math.random() * 255);
             const b = Math.floor(Math.random() * 255);
@@ -131,10 +135,11 @@ function initialize(){
                 })
                 for(let i = 0; i < codigosGetInfo.length; i++){
                     pdf.text(`Peça: ${data.name[codigosGetInfo[i]]} - Estoque: ${data.estoque[codigosGetInfo[i]]}`, 10, yPosition);
-                    if(data.desc[codigosGetInfo[i]] != ''){ // Caso o produto tenha descrição, ela será inserida
-                        yPosition += 5;
-                        pdf.text(`Descrição: ${data.desc[codigosGetInfo[i]]}`, 10, yPosition);
-                    }
+                    const descricao = data.desc[codigosGetInfo[i]] == '' || data.desc[codigosGetInfo[i]] == undefined ? 'Não possui descrição' : data.desc[codigosGetInfo[i]];
+
+                    yPosition += 5;
+                    pdf.text(`Descrição: ${descricao}`, 10, yPosition);
+
                     yPosition += 10;
                 }
             }
@@ -142,6 +147,7 @@ function initialize(){
             // Salva PDF
             pdf.save("relatório.pdf");
 
+        }
         }
 
     }
