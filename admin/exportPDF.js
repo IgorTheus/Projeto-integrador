@@ -7,17 +7,7 @@ function initialize(){
         let output = 0;
         const select = document.querySelector("#typeGraphic");
         const selected = select.value;
-        let type = null;
         const data = JSON.parse(estoqueDados);
-        
-        // if(selected == 'mov'){
-        //     type = 'mov';
-        // } else if(selected == 'stock'){
-        //     type = 'stock';
-        // } else {
-        //     alert("Insira um tipo de relatório!");
-        //     return false;
-        // }
 
         if(selected != 'mov' && selected != 'stock'){
             alert("Insira um tipo de relatório!");
