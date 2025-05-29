@@ -231,6 +231,7 @@ function codError(){ // Adiciona ou remove erros do input código
             return false;
         }
         if(codVerify.length < 8){
+            codInp[0].classList.remove("err-msg");
             codInp[1].classList.remove("err-msg");
             codInp[2].classList.add("err-msg");
             cod[0].classList.add("invalid-input");
@@ -276,13 +277,26 @@ function checkDesc(){ // Checa se é uma descrição sem caracteres
 
 function checkAmt(){ // Checa se o input amount está vazio ou não
     const amtInp = document.getElementById("amtReg");
-    const pInvalid = document.querySelector(".register .invalid-amt");
-    if(amtInp.value == ""){
-        pInvalid.classList.add("err-msg");
+    const pInvalid = document.querySelectorAll(".register .invalid-amt");
+    if(amtInp.value == ""){ // Checa se está vazio
+        pInvalid.forEach(pInd => {
+            pInd.classList.remove("err-msg");
+        })
+        pInvalid[0].classList.add("err-msg");
         amtInp.classList.add("invalid-input");
         return false;
-    } else {
-        pInvalid.classList.remove("err-msg");
+    }
+    if(amtInp.value == 0){ // Checa se é igual a 0
+        pInvalid.forEach(pInd => {
+            pInd.classList.remove("err-msg");
+        })
+        pInvalid[1].classList.add("err-msg");
+        amtInp.classList.add("invalid-input");
+        return false;
+    } else { // Caso contrário, remove os erros
+        pInvalid.forEach(pInd => {
+            pInd.classList.remove("err-msg");
+        })
         amtInp.classList.remove("invalid-input");
         return true;
     }
@@ -295,24 +309,10 @@ function registerStock(name, amt, status){ // Identifica se é entrada ou saida 
     let monthFormat = month < 10 ? '0' + month : month.toString();
     let dayFormat = day < 10 ? '0' + day : day;
     let year = date.getFullYear();
-    let color;
+    let color = '#32C505'
     let dataFormat = `${dayFormat}/${monthFormat}/${year}`;
     dados['data'].push(dataFormat);
-    if(amt == 0 && status == 'saida'){
-        color = '#FF0000';
-        tbody.innerHTML += `
-        <tr style="background-color: rgba(255, 0, 0, 0.15);">
-            <td>${name}</td>
-            <td>${amt}</td>
-            <td class="status">
-                <i class="fa-solid fa-circle" style="color: ${color};"></i>
-                <p class="sem-estoque">Sem estoque</p>    
-            </td>
-            <td>${dataFormat}</td>
-        </tr>`
-    }
-    if(amt != 0 && status == 'saida'){
-        color = '#32C505';
+    if(status == 'saida'){
         tbody.innerHTML += `
         <tr style="background-color: rgba(255, 0, 0, 0.15);">
             <td>${name}</td>
@@ -324,21 +324,7 @@ function registerStock(name, amt, status){ // Identifica se é entrada ou saida 
             <td>${dataFormat}</td>
         </tr>`
     }
-    if(amt == 0 && status == 'entrada'){
-        color = '#FF0000';
-        tbody.innerHTML += `
-        <tr style="background-color: rgba(0, 255, 0, 0.25);">
-            <td>${name}</td>
-            <td>${amt}</td>
-            <td class="status">
-                <i class="fa-solid fa-circle" style="color: ${color};"></i>
-                <p class="sem-estoque">Sem estoque</p>    
-            </td>
-            <td>${dataFormat}</td>
-        </tr>`
-    }
-    if(amt != 0 && status == 'entrada'){
-        color = '#32C505';
+    if(status == 'entrada'){
         tbody.innerHTML += `
         <tr style="background-color: rgba(0, 255, 0, 0.25);">
             <td>${name}</td>

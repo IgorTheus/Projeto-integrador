@@ -35,7 +35,7 @@
                 <div class="title title-delete hidden">
                     <h2>Remover Peças</h2>
                 </div>
-                <form class="register">
+                <form class="register"> <!-- Formulário para cadastrar peças -->
 
                     <div class="inputs name-input">
                         <label for="name">Nome do Produto:</label>
@@ -60,6 +60,7 @@
                         <label for="amt">Quantidade:</label>
                         <input class="input" type="number" name="amt" id="amtReg" placeholder="0" min="0">
                         <p class="invalid invalid-amt">Este campo precisa estar preenchido!</p>
+                        <p class="invalid invalid-amt">Essa quantidade é inválida!</p>
                     </div>
 
                     <div class="btn-reg">
@@ -69,7 +70,7 @@
                         <input type="submit" value="Remover peça" id="remove-btn">
                     </div>
                 </form>
-                <form class="register delete-form hidden">
+                <form class="register delete-form hidden"> <!-- Formulário para deletar peças -->
                     
                     <div class="inputs cod-input">
                         <label for="cod">Código:</label>
@@ -79,7 +80,7 @@
                     </div>
                     <div class="inputs amt-input">
                         <label for="amt">Quantidade:</label>
-                        <input class="input" type="number" name="amt" id="amtDel" placeholder="0" min="0">
+                        <input class="input" type="number" name="amt" id="amtDel" placeholder="1">
                         <p class="invalid invalid-amt">Este campo precisa estar preenchido!</p>
                         <p class="invalid invalid-amt">Essa quantidade é inválida no estoque!</p>
                         <p class="invalid invalid-amt">Produto não identificado!</p>
