@@ -5,6 +5,12 @@
     font-family: 'Kanit', sans-serif;
 }
 
+button, input, select { /* Retirando a estilização padrão dos dispositivos e navegadores */
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
 .header {
     width: 100%;
     background-color: #D2D2D2;
