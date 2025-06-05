@@ -1,10 +1,3 @@
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: 'Kanit', sans-serif;
-}
-
 main {
     width: 100%;
     height: calc(100vh - 120px);
@@ -88,7 +81,8 @@ label {
 .button-register {
     width: 156px;
     height: 38px;
-    background-color: rgba(255, 255, 255, 0);
+    background-color: white;
+    color: black;
     border-radius: 10px;
     border: 1px solid black;
     font-size: 20px;
